@@ -6,7 +6,8 @@ import AddReview from "./components/add-review";
 import MoviesList from "./components/movies-list";
 import Movie from "./components/movie";
 import Login from "./components/login";
-import {Nav, Navbar} from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
+import Contact from "./components/contact";
 
 
 function App() {
@@ -32,6 +33,9 @@ function App() {
             <Nav.Link>
               {user ? (<button onClick={logout}>Logout User</button>) : (<Link to={"/login"}>Login</Link>)}
             </Nav.Link>
+            <Nav.Link>
+              <Link to="/contact">Contact</Link>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -55,6 +59,7 @@ function App() {
           <Login {...props} login={login} />
         }>
         </Route>
+        <Route path="/contact" component={Contact} />
       </Switch>
 
     </div>
