@@ -78,4 +78,29 @@ export default class MoviesController {
         }
     }
 
+    // Controller for POST /api/v1/movies — adds a new movie
+    static async apiPostMovie(req, res, next) {
+        try {
+            const movieData = {
+                title: req.body.title,
+                plot: req.body.plot,
+                rated: req.body.rated,
+                fullplot: req.body.fullplot,
+                year: req.body.year,
+                runtime: req.body.runtime,
+                genres: req.body.genres, 
+                cast: req.body.cast,     
+                directors: req.body.directors,
+                writers: req.body.writers,
+            }
+
+            const movieResponse = await MoviesDAO.addMovie(movieData)
+
+            res.status(201).json({ status: "success", movie_id: movieResponse.insertedId })
+        } catch (e) {
+            console.error(`Failed to post movie: ${e}`)
+            res.status(500).json({ error: e.message })
+        }
+    }
+
 }
