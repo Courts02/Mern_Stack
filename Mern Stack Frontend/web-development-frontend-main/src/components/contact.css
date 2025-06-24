@@ -1,0 +1,90 @@
+.contact-container {
+  max-width: 600px;
+  margin: 60px auto;
+  background: linear-gradient(135deg, #e0f7ff, #f0faff);
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(100, 180, 255, 0.4);
+  padding: 40px 30px;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.contact-container h2 {
+  font-size: 2rem;
+  color: #0077cc;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.contact-container p {
+  color: #444;
+  font-size: 1rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.contact-container label {
+  font-weight: 600;
+  color: #333;
+}
+
+.contact-container input,
+.contact-container textarea {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.contact-container input:focus,
+.contact-container textarea:focus {
+  box-shadow: 0 0 10px #5bc0f8;
+  border-color: #5bc0f8;
+  outline: none;
+}
+
+.contact-container button {
+  background: linear-gradient(135deg, #1e90ff, #00bfff);
+  color: white;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-container button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: skewX(-25deg);
+  transition: left 0.5s;
+}
+
+.contact-container button:hover::after {
+  left: 125%;
+}
+
+.contact-container button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #00aaff, #0080ff);
+  box-shadow: 0 6px 20px rgba(30, 144, 255, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
