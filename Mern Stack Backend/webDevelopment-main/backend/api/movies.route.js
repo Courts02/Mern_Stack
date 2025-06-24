@@ -20,6 +20,7 @@ router.route("/id/:id").get(MoviesController.apiGetMovieById)
 // Returns a list of all available movie ratings
 router.route("/ratings").get(MoviesController.apiGetRatings)
 
+router.route("/create").post(MoviesController.apiPostMovie)
 
 // --- ✍️ Review Routes (CRUD) ---
 
