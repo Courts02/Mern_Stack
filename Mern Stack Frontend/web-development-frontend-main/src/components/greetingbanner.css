@@ -1,0 +1,11 @@
+ .greeting-banner {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3);
+}
