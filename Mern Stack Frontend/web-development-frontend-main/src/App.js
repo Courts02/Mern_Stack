@@ -8,7 +8,7 @@ import Movie from "./components/movie";
 import Login from "./components/login";
 import { Nav, Navbar } from 'react-bootstrap';
 import Contact from "./components/contact";
-
+import GreetingBanner from "./components/greetingbanner"; 
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -39,6 +39,8 @@ function App() {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+
+{user && <GreetingBanner user={user} />} 
 
       <Switch>
         {/* what displays is the movies list  */}
