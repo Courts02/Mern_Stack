@@ -15,6 +15,9 @@ import './MovieList.css';
 
 const MoviesList = props => {
 
+   //  State for total number of movies available (temporary fallback to 100)
+   const [totalResults, setTotalResults] = useState(100);
+
    // State to hold list of movies returned from API
    const [movies, setMovies] = useState([]);
    // State for search input: movie title
@@ -68,6 +71,10 @@ const MoviesList = props => {
             setMovies(response.data.movies); // Update movies state
             setCurrentPage(response.data.page); // Update page number
             setEntriesPerPage(response.data.entries_per_page); // Update per page count
+
+            if (response.data.total_results) {
+              setTotalResults(response.data.total_results);
+            }
          })
          .catch(e => {
             console.log(e);
@@ -126,6 +133,9 @@ const MoviesList = props => {
       }
    };
 
+   // Calculate how many movies are left to view
+   const moviesLeft = totalResults - ((currentPage + 1) * entriesPerPage);
+
    return (
       <div className="App">
          <Container>
@@ -154,7 +164,7 @@ const MoviesList = props => {
                         <Form.Control as="select" onChange={onChangeSearchRating} >
                            {ratings.map(rating => {
                               return (
-                                 <option value={rating}>{rating}</option>
+                                 <option key={rating} value={rating}>{rating}</option>
                               )
                            })}
                         </Form.Control>
@@ -174,7 +184,7 @@ const MoviesList = props => {
             <Row>
                {movies.map((movie) => {
                   return (
-                     <Col>
+                     <Col key={movie._id}>
                         <Card style={{ width: '18rem' }}>
                            <Card.Img src={movie.poster + "/100px180"} />
                            <Card.Body>
@@ -203,6 +213,14 @@ const MoviesList = props => {
          >
             Get next {entriesPerPage} results
          </Button>
+
+         <br />
+         {/* Show how many movies are left */}
+         <p>
+            {moviesLeft > 0
+              ? `${moviesLeft} movies left to view`
+              : `No more movies left to view.`}
+         </p>
       </div>
    );
 }
