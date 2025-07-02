@@ -15,37 +15,46 @@ import './MovieList.css';
 
 const MoviesList = props => {
 
-   //  State for total number of movies available (temporary fallback to 100)
+   // State for total number of movies (fallback to 100)
    const [totalResults, setTotalResults] = useState(100);
 
-   // State to hold list of movies returned from API
+   // Movies returned from API
    const [movies, setMovies] = useState([]);
-   // State for search input: movie title
+
+   // Search input for title
    const [searchTitle, setSearchTitle] = useState("");
-   // State for search input: movie rating
+
+   // Search input for rating
    const [searchRating, setSearchRating] = useState("");
-   // State for available ratings options
+
+   // Available ratings dropdown options
    const [ratings, setRatings] = useState(["All Ratings"]);
-   // State to track the current page number for pagination
+
+   // Current page number for pagination
    const [currentPage, setCurrentPage] = useState(0);
-   // State for how many entries per page
+
+   // Entries per page returned by backend
    const [entriesPerPage, setEntriesPerPage] = useState(0);
-   // State to know if searching by title or rating
+
+   // Track which search mode is active
    const [currentSearchMode, setCurrentSearchMode] = useState("");
 
-   // Whenever the search mode changes, reset to first page
+   // Flag to know when search button is clicked
+   const [searchClicked, setSearchClicked] = useState(false);
+
+   // Reset page to 0 when search mode changes
    useEffect(() => {
       setCurrentPage(0);
       // eslint-disable-next-line 
    }, [currentSearchMode]);
 
-   // Whenever the page number changes, retrieve next set of movies
+   // When page changes, load next page data
    useEffect(() => {
       retrieveNextPage();
       // eslint-disable-next-line 
    }, [currentPage]);
 
-   // Decide which retrieve function to call based on current search mode
+   // Decide which data to fetch based on current search mode
    const retrieveNextPage = () => {
       if (currentSearchMode === 'findByTitle')
          findByTitle();
@@ -55,25 +64,25 @@ const MoviesList = props => {
          retrieveMovies();
    };
 
-   // On first load, get movies list and ratings
+   // On first load, fetch all movies and available ratings
    useEffect(() => {
       retrieveMovies();
       retrieveRatings();
       // eslint-disable-next-line 
    }, []);
 
-   // Get all movies for the current page
+   // Fetch all movies for the current page
    const retrieveMovies = () => {
       setCurrentSearchMode("");
       MovieDataService.getAll(currentPage)
          .then(response => {
             console.log(response.data);
-            setMovies(response.data.movies); // Update movies state
-            setCurrentPage(response.data.page); // Update page number
-            setEntriesPerPage(response.data.entries_per_page); // Update per page count
+            setMovies(response.data.movies);
+            setCurrentPage(response.data.page);
+            setEntriesPerPage(response.data.entries_per_page);
 
             if (response.data.total_results) {
-              setTotalResults(response.data.total_results);
+               setTotalResults(response.data.total_results);
             }
          })
          .catch(e => {
@@ -81,7 +90,7 @@ const MoviesList = props => {
          });
    };
 
-   // Get available movie ratings for filter dropdown
+   // Fetch available movie ratings for dropdown
    const retrieveRatings = () => {
       MovieDataService.getRatings()
          .then(response => {
@@ -93,19 +102,19 @@ const MoviesList = props => {
          });
    };
 
-   // Handler for search title input change
+   // Update searchTitle when user types
    const onChangeSearchTitle = e => {
       const searchTitle = e.target.value;
       setSearchTitle(searchTitle);
    };
 
-   // Handler for search rating dropdown change
+   // Update searchRating when dropdown changes
    const onChangeSearchRating = e => {
       const searchRating = e.target.value;
       setSearchRating(searchRating);
    };
 
-   // General find function used by findByTitle and findByRating
+   // General find function used for title and rating searches
    const find = (query, by) => {
       MovieDataService.find(query, by, currentPage)
          .then(response => {
@@ -117,13 +126,14 @@ const MoviesList = props => {
          });
    };
 
-   // Find movies by title
+   // Search by title, switch mode, and toggle searchClicked flag
    const findByTitle = () => {
       setCurrentSearchMode("findByTitle");
       find(searchTitle, "title");
+      setSearchClicked(prev => !prev);
    };
 
-   // Find movies by rating or reset if "All Ratings" is selected
+   // Search by rating, switch mode, and toggle searchClicked flag
    const findByRating = () => {
       setCurrentSearchMode("findByRating");
       if (searchRating === "All Ratings") {
@@ -131,15 +141,22 @@ const MoviesList = props => {
       } else {
          find(searchRating, "rated");
       }
+      setSearchClicked(prev => !prev);
    };
 
-   // Calculate how many movies are left to view
+   // Run when searchClicked changes, logs current search inputs
+   useEffect(() => {
+      console.log("Title:", searchTitle);
+      console.log("Ratings:", ratings);
+   }, [searchClicked]);
+
+   // Calculate how many movies are left to load
    const moviesLeft = totalResults - ((currentPage + 1) * entriesPerPage);
 
    return (
       <div className="App">
          <Container>
-            {/* Search form for title and rating */}
+            {/* Search form with title and rating inputs */}
             <Form>
                <Row>
                   <Col>
@@ -180,7 +197,7 @@ const MoviesList = props => {
                </Row>
             </Form>
 
-            {/* Movie cards list */}
+            {/* Render movie cards */}
             <Row>
                {movies.map((movie) => {
                   return (
@@ -204,9 +221,11 @@ const MoviesList = props => {
             </Row>
 
          </Container>
+
          <br />
-         {/* Pagination: show current page and load next results */}
          Showing page: {currentPage}
+
+         {/* Button to get next page */}
          <Button
             variant="link"
             onClick={() => { setCurrentPage(currentPage + 1) }}
@@ -215,11 +234,12 @@ const MoviesList = props => {
          </Button>
 
          <br />
-         {/* Show how many movies are left */}
+
+         {/* Show movies left to view */}
          <p>
             {moviesLeft > 0
-              ? `${moviesLeft} movies left to view`
-              : `No more movies left to view.`}
+               ? `${moviesLeft} movies left to view`
+               : `No more movies left to view.`}
          </p>
       </div>
    );
