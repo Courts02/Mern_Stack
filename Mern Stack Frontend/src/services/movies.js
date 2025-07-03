@@ -6,42 +6,42 @@ class MovieDataService {
 
     // Get a paginated list of movies (defaults to page 0)
     getAll(page = 0) {
-        return axios.get(`https://backend-sqox.onrender.com//api/v1/movies?page=${page}`)
+        return axios.get(`https://backend-sqox.onrender.com/api/v1/movies?page=${page}`)
     }
 
     // Get a specific movie by its ID
     get(id) {
-        return axios.get(`https://backend-sqox.onrender.com//api/v1/movies/id/${id}`)
+        return axios.get(`https://backend-sqox.onrender.com/api/v1/movies/id/${id}`)
     }
 
     // 🔍 Search for movies (by title by default), with optional page and rating filter
     find(query, by = "title", page = 0, rating) {
         return axios.get(
-            `https://backend-sqox.onrender.com//api/v1/movies?${by}=${query}&page=${page}&rating=${rating}`
+            `https://backend-sqox.onrender.com/api/v1/movies?${by}=${query}&page=${page}&rating=${rating}`
         )
     }
 
     // Submit a new review for a movie
     createReview(data) {
-        return axios.post("https://backend-sqox.onrender.com//api/v1/movies/review", data)
+        return axios.post("https://backend-sqox.onrender.com/api/v1/movies/review", data)
     }
 
     // Edit an existing review
     updateReview(data) {
-        return axios.put("https://backend-sqox.onrender.com//api/v1/movies/review", data)
+        return axios.put("https://backend-sqox.onrender.com/api/v1/movies/review", data)
     }
 
     // Delete a review using the review ID and user ID
     deleteReview(id, userId) {
         return axios.delete(
-            "https://backend-sqox.onrender.com//api/v1/movies/review",
+            "https://backend-sqox.onrender.com/api/v1/movies/review",
             { data: { review_id: id, user_id: userId } } // Send data in request body
         )
     }
 
     // Get a list of all distinct movie ratings from the database
     getRatings() {
-        return axios.get("https://backend-sqox.onrender.com//api/v1/movies/ratings")
+        return axios.get("https://backend-sqox.onrender.com/api/v1/movies/ratings")
     }
 }
 
